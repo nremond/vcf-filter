@@ -8,15 +8,16 @@ cmake ..
 make
 ~~~
 
-##Running
+##Running the unit tests
 
 ~~~
 cd build && make test
 ~~~
 
-or
+##Running the programm
 
 ~~~
-build/test/testvcf/testvcf
+cd build && ./main/vcfFilter -in ~/Downloads/sample.vcf -out ~/Downloads/sample_filtered.vcf -filter "AF > 0.5"
 ~~~
 
+The filter expression is composed of `<variable name> <boolean op> <float value>` which will apply on the INFO column. Currently, the supported operators are `<`, `<=`, `==`, `>`, `>=`.
