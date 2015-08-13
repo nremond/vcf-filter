@@ -1,3 +1,4 @@
+Toy project around the VCF format, see https://samtools.github.io/hts-specs/VCFv4.2.pdf
 
 ##Building
 
