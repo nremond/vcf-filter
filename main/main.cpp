@@ -1,3 +1,4 @@
+#include "utilities.h"
 #include "variant.h"
 #include "variantcollection.h"
 
@@ -8,16 +9,6 @@
 #include <algorithm>
 
 using namespace std;
-
-// string str = "chr6	44387517	rs6923521	C	G	184.84	PASS	AC=2;AF=1.00;AN=2;DB;DP=6;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=60.00;MQ0=0;POSITIVE_TRAIN_SITE;QD=30.81;SOR=3.912;VQSLOD=6.47;culprit=FS	GT:AD:DP:GQ:PL	1/1:0,6:6:18:213,18,0";
-//     stringstream ss(str);    
-
-//     Variant v;
-// 	ss >> v;
-
-// 	cout << "Yo Nico" << endl;
-// 	cout << v << endl;
-// }
 
 
 char* getCmdOption(char **begin, char **end, const std::string &option) {
@@ -32,25 +23,56 @@ bool cmdOptionExists(char **begin, char **end, const std::string &option) {
     return std::find(begin, end, option) != end;
 }
 
+void printHelp() {
+	cerr << "usage: vcfFilter -in <input.vcf> -out <output.vcf> -filter \"AF <= 0.5\"" << endl;
+}
+
+vector<string> parseFilter(char *buff) {
+	string s(buff);
+	vector<string> v;
+	split(v, s, ' ');
+	return v;
+}
+
+function<bool (double, double)> boolOperator(string op) {
+	if(op == "<") {
+		return [](double a, double b) { return a < b; };
+	} else if(op == "<=") {
+		return [](double a, double b) { return a <= b; };
+	} else if(op == "==") {
+		return [](double a, double b) { return a == b; };
+	} else if(op == ">") {
+		return [](double a, double b) { return a > b; };
+	} else if(op == ">=") {
+		return [](double a, double b) { return a >= b; };
+	} else {
+		throw;
+	}
+}
+
 int main(int argc, char *argv[]) {
     if(cmdOptionExists(argv, argv+argc, "-h")) {
-        // Do stuff
+        printHelp();
+        return 0;
     }
 
     char *infilename = getCmdOption(argv, argv + argc, "-in");
 
     if(!infilename) {
-    	cout << "Missing input vcf filename, use the '-in' argument." << endl;
-    	return 0;
+    	cerr << "Missing input vcf filename, use the '-in' argument." << endl;
+    	printHelp();
+    	return 1;
     }
 
     char *outfilename = getCmdOption(argv, argv + argc, "-out");
 
     if(!outfilename) {
-    	cout << "Missing output vcf filename, use the '-out' argument." << endl;
-    	return 0;
+    	cerr << "Missing output vcf filename, use the '-out' argument." << endl;
+    	printHelp();
+    	return 1;
     }
 
+	char *filterDef = getCmdOption(argv, argv + argc, "-filter");
 
     ifstream infile(infilename);
 	if (infile.is_open()) {
@@ -59,16 +81,43 @@ int main(int argc, char *argv[]) {
 		infile >> vc;
 		infile.close();
 
-		cout << "YO NICO nb variants= " << vc.getVariants().size() << endl;
-		cout << "YO NICO nb headers= " << vc.getHeaders().size() << endl;
+		cout << "input file has " << vc.getVariants().size() << " variants" << endl;
 
-	
+		auto filterArgs = parseFilter(filterDef);
+		function<bool (const Variant&)> filter;
+		try {
+			auto varName = filterArgs[0];
+			auto op = boolOperator(filterArgs[1]);
+			auto rhs = stod(filterArgs[2]);
+
+			filter = [&](const Variant &v) 
+				{ 
+					try	{
+					    double lhs = stod(v.getInfos().at(varName));
+					    return op(lhs, rhs);
+					} catch(...) {
+						return true; 
+					} 
+				};
+		} catch(...) { 
+			cerr << "Invalid filter definition, it should be composed of a '<variable name> <boolean op> <float value>'" << endl;
+			printHelp();
+			return 1;
+		}
+
+		
+		VariantCollection vc2(vc, filter);
+
+		cout << "output file has " << vc2.getVariants().size() << " variants" << endl;
 
 		ofstream outFile;
 		outFile.open(outfilename);
 
 		outFile << vc;
 		outFile.close();
+	} else {
+		cerr << "Can't open input file" << endl;
+		return 1;
 	}
 
     return 0;

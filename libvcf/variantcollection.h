@@ -30,6 +30,7 @@ private:
 public:
     VariantCollection();
     // default copy-constructor is fine
+    VariantCollection(const VariantCollection &vc, std::function<bool(const Variant&)>);
 
     auto getFileFormat() { return fileFormat; }
     auto getFilters() { return filters; }

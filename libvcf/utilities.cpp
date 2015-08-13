@@ -18,7 +18,7 @@ string join(const vector<string>& v, const string& delim) {
     return s.str();
 }
 
-vector<string> splitn( vector<string> &vec, const string &str, const char delimiter) {
+vector<string> split( vector<string> &vec, const string &str, const char delimiter) {
   stringstream ss(str); // Turn the string into a stream.
   string tok;
   

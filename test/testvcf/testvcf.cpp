@@ -1,6 +1,7 @@
 #include "variant.h"
 #include "variantcollection.h"
 #include "testvcf.h"
+#include "sample_vcf.h"
 
 #include <string>
 #include <sstream>
@@ -33,6 +34,15 @@ TEST_F(VariantTest, ReadAndWriteVariant) {
 }
 
 TEST_F(VariantTest, ReadAndWriteVariantCollection) {
+	stringstream ss(sample_vcf);
 
-    EXPECT_EQ(true, true);
+	VariantCollection vc;
+	ss >> vc;
+
+	EXPECT_EQ(vc.getVariants().size(), 1997);
+
+    stringstream ss2;
+    ss2 << vc;
+
+    EXPECT_EQ(ss2.str(), sample_vcf);  
 }

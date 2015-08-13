@@ -35,7 +35,7 @@ istream &operator>>(istream  &in, Variant &v) {
 	
 	//3
 	in >> buff;
-	splitn(v.identifier, buff, ';');
+	split(v.identifier, buff, ';');
 
 	//4
 	in >> buff;
@@ -58,7 +58,7 @@ istream &operator>>(istream  &in, Variant &v) {
 	//8
 	in >> buff;
 	vector<string> keyValues;
-	splitn(keyValues, buff, ';');
+	split(keyValues, buff, ';');
 	for(auto kv : keyValues) {
 		auto p = split2(kv, '=');
 		v.infos[p.first] = p.second;

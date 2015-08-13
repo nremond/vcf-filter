@@ -6,7 +6,7 @@
 
 std::string join(const std::vector<std::string>& v, const std::string& delim);
 
-std::vector<std::string> splitn( std::vector<std::string> &vec, const std::string &str, const char delimiter);
+std::vector<std::string> split(std::vector<std::string> &vec, const std::string &str, const char delimiter);
 
 std::pair<std::string, std::string> split2(const std::string &str, const char delimiter);
 
