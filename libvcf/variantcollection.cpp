@@ -21,7 +21,7 @@ VariantCollection::VariantCollection() {}
 VariantCollection::VariantCollection(const VariantCollection &vc, Filter &filterDef, std::function<bool(const Variant&)> filter)
 	:fileFormat(vc.fileFormat), filters(vc.filters), headers(vc.headers), variants(vc.variants.size()) {
 
-	std::function<bool (const Variant&)> keep = [&](const Variant &v) { return filter(v); };
+	std::function<bool (const Variant&)> keep = [&](const Variant &v) { return !filter(v); };
 	auto it = copy_if(vc.variants.begin(), vc.variants.end(), variants.begin(), keep);
 	variants.resize(std::distance(variants.begin(), it));  
 
