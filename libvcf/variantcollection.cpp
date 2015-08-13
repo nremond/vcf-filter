@@ -18,14 +18,14 @@ bool startWith(const string &s, const string &prefix) {
 
 VariantCollection::VariantCollection() {}
 
-VariantCollection::VariantCollection(const VariantCollection &vc, std::function<bool(const Variant&)> filter)
+VariantCollection::VariantCollection(const VariantCollection &vc, Filter &filterDef, std::function<bool(const Variant&)> filter)
 	:fileFormat(vc.fileFormat), filters(vc.filters), headers(vc.headers), variants(vc.variants.size()) {
 
 	std::function<bool (const Variant&)> keep = [&](const Variant &v) { return filter(v); };
 	auto it = copy_if(vc.variants.begin(), vc.variants.end(), variants.begin(), keep);
 	variants.resize(std::distance(variants.begin(), it));  
 
-	// TODO add a line in the filters
+	filters.push_back(filterDef);
 }
 
 string FILTER_ID = "ID=";

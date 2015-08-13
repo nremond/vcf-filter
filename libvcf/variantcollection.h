@@ -13,6 +13,7 @@ private:
 	std::string id;
 	std::string desc;
 public:
+	Filter() {}
 	Filter(const std::string id, const std::string desc)
 		:id(id), desc(desc)	{}
 
@@ -30,7 +31,7 @@ private:
 public:
     VariantCollection();
     // default copy-constructor is fine
-    VariantCollection(const VariantCollection &vc, std::function<bool(const Variant&)>);
+    VariantCollection(const VariantCollection &, Filter &, std::function<bool(const Variant&)>);
 
     auto getFileFormat() { return fileFormat; }
     auto getFilters() { return filters; }

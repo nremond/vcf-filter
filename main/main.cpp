@@ -85,9 +85,11 @@ int main(int argc, char *argv[]) {
 
 		auto filterArgs = parseFilter(filterDef);
 		function<bool (const Variant&)> filter;
+		Filter filterDoc;
 		try {
 			auto varName = filterArgs[0];
-			auto op = boolOperator(filterArgs[1]);
+			auto opSymbol = filterArgs[1];
+			auto op = boolOperator(opSymbol);
 			auto rhs = stod(filterArgs[2]);
 
 			filter = [&](const Variant &v) 
@@ -99,6 +101,14 @@ int main(int argc, char *argv[]) {
 						return true; 
 					} 
 				};
+
+			std::ostringstream filterId;
+			filterId << "Del-" << varName << opSymbol << rhs;
+
+			std::ostringstream filterDesc;
+			filterDesc << "Delete when "<< varName << " " << opSymbol << rhs; 
+
+			filterDoc = Filter(filterId.str(), filterDesc.str());
 		} catch(...) { 
 			cerr << "Invalid filter definition, it should be composed of a '<variable name> <boolean op> <float value>'" << endl;
 			printHelp();
@@ -106,14 +116,14 @@ int main(int argc, char *argv[]) {
 		}
 
 		
-		VariantCollection vc2(vc, filter);
+		VariantCollection vc2(vc, filterDoc, filter);
 
 		cout << "output file has " << vc2.getVariants().size() << " variants" << endl;
 
 		ofstream outFile;
 		outFile.open(outfilename);
 
-		outFile << vc;
+		outFile << vc2;
 		outFile.close();
 	} else {
 		cerr << "Can't open input file" << endl;
