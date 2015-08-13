@@ -1,7 +1,9 @@
 #include "variant.h"
 #include "utilities.h"
+
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -92,7 +94,12 @@ ostream &operator<<(ostream &out, const Variant &v) {
 	out << delim;
 
 	//6
-	out << v.quality << delim;
+	int quality = v.quality;
+	if((v.quality-quality) < 0.01) {
+		out << quality << delim;
+	} else {
+		out << setprecision (2) << fixed << v.quality << delim;
+	}
 
 	//7
 	out << v.filterStatus << delim;

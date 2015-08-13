@@ -4,13 +4,13 @@ set(Main_SRCS
     main.cpp
 )
 
-add_executable(myApp
+add_executable(vcfFilter
     ${Main_SRCS}
 )
 
 # Specify here the libraries this program depends on
-target_link_libraries(myApp
+target_link_libraries(vcfFilter
     libvcf
 )
 
-install(TARGETS myApp DESTINATION bin)
+install(TARGETS vcfFilter DESTINATION bin)
