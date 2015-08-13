@@ -1,5 +1,5 @@
-#include "variantcollection.h"
 #include "utilities.h"
+#include "variantcollection.h"
 
 #include <iostream>
 #include <sstream>

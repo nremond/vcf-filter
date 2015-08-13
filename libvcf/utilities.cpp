@@ -5,11 +5,9 @@
 
 using namespace std;
 
-
 // Utilities //////////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
-string join(const T& v, const string& delim) {
+string join(const vector<string>& v, const string& delim) {
     ostringstream s;
     for (const auto& i : v) {
         if (&i != &v[0]) {
@@ -20,7 +18,7 @@ string join(const T& v, const string& delim) {
     return s.str();
 }
 
-vector<string> splitn(vector<string> &vec, string &str, char delimiter) {
+vector<string> splitn( vector<string> &vec, const string &str, const char delimiter) {
   stringstream ss(str); // Turn the string into a stream.
   string tok;
   
@@ -31,7 +29,7 @@ vector<string> splitn(vector<string> &vec, string &str, char delimiter) {
   return vec;
 }
 
-pair<string, string> split2(string &str, char delimiter) {
+pair<string, string> split2(const string &str, const char delimiter) {
     string::size_type pos = str.find(delimiter);
     if(str.npos != pos) {
         auto k = str.substr(0, pos);

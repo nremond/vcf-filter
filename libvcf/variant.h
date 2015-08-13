@@ -25,9 +25,6 @@ public:
     Variant();
     // default copy-constructor is fine
 
-    friend std::istream &operator>>(std::istream &in, Variant &v);
-	friend std::ostream &operator<<(std::ostream &out, const Variant &v);
-
 	auto getChromosome() const { return chromosome; }
 	auto getPosition() const { return position; }
 	auto getIdentifier() const { return identifier; }
@@ -37,6 +34,9 @@ public:
 	auto getFilterStatus() const { return filterStatus; }
 	auto getInfos() const { return infos; }
 	auto getExtras() const { return extras; }
+
+    friend std::istream &operator>>(std::istream &in, Variant &v);
+	friend std::ostream &operator<<(std::ostream &out, const Variant &v);
 };
 
 

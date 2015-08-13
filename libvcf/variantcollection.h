@@ -1,7 +1,7 @@
 #ifndef VARIANTCOLLECTION_H
 #define VARIANTCOLLECTION_H
 
-#include "variant.h"
+#include "utilities.h"
 
 #include <string>
 #include <vector>
@@ -10,7 +10,6 @@
 class VariantCollection {
 private:
 	//std:string fileFormat;
-	std::string chromosome;                   //1
 
 public:
     VariantCollection();

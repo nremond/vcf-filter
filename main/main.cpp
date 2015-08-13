@@ -1,4 +1,3 @@
-
 #include "variant.h"
 #include "variantcollection.h"
 
